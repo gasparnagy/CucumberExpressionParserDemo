@@ -63,7 +63,7 @@ namespace Cucumber
                 }
             }
 
-            if (char.IsLetterOrDigit(c))
+            if (char.IsLetterOrDigit(c) || treatAsText)
                 return TokenType.Word;
             return TokenType.Separator;
         }
