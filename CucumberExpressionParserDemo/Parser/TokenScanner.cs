@@ -13,6 +13,9 @@ namespace Cucumber
             _scanner = Scan(expressionString);
         }
 
+        private bool IsAccumulatedToken(TokenType type) =>
+            type == TokenType.Word || type == TokenType.Separator;
+
         public IEnumerator<Token> Scan(string expressionString)
         {
             var tokenType = TokenType.None;
@@ -32,7 +35,7 @@ namespace Cucumber
 
                 var type = GetTokenType(c, treatNextAsText);
                 treatNextAsText = false;
-                if (type != tokenType)
+                if (type != tokenType || !IsAccumulatedToken(tokenType))
                 {
                     if (tokenType != TokenType.None)
                         yield return new Token(tokenType, tokenText.ToString(), expressionString, startPosition);
