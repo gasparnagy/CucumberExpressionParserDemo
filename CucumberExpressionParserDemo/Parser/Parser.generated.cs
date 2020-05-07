@@ -787,8 +787,10 @@ namespace Cucumber
         bool Match_Other(Token token);
     }
 
+
     public partial class SimpleTokenMatcher : ITokenMatcher
     {
+
         public virtual bool Match_EOF(Token token) => token.TokenType == TokenType.EOF;
         public virtual bool Match_Word(Token token) => token.TokenType == TokenType.Word;
         public virtual bool Match_Separator(Token token) => token.TokenType == TokenType.Separator;
@@ -798,11 +800,13 @@ namespace Cucumber
         public virtual bool Match_LCurl(Token token) => token.TokenType == TokenType.LCurl;
         public virtual bool Match_RCurl(Token token) => token.TokenType == TokenType.RCurl;
         public virtual bool Match_Other(Token token) => token.TokenType == TokenType.Other;
+
     }
     
     public partial class TokenMatcher : SimpleTokenMatcher
     {
     }
+
 }
 #pragma warning restore
 #endregion

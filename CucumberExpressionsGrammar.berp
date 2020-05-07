@@ -4,6 +4,7 @@
 	Namespace -> Cucumber
 	TargetNamespace -> Cucumber.Ast
 	TargetClassName -> CucumberExpression
+	SimpleTokenMatcher -> true
 ]
 
 
