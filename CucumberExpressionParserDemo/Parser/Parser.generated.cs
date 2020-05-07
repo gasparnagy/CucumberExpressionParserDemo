@@ -44,7 +44,7 @@ namespace Cucumber
         Alternate, // Alternate! [-&gt;#Word] := (Optional | Text)+
         Text, // Text! := #Word
         Optional, // Optional! := #LParen (#Word | #Separator)+ #RParen
-        Parameter, // Parameter! := #LCurl #Word #RCurl
+        Parameter, // Parameter! := #LCurl #Word? #RCurl
     }
 
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -380,10 +380,15 @@ namespace Cucumber
                 Build(context, token);
                 return 3;
             }
+            if (Match_RCurl(context, token))
+            {
+                Build(context, token);
+                return 4;
+            }
             
             const string stateComment = "State: 2 - CucumberExpression:0>__alt0:1>Parameter:0>#LCurl:0";
             token.Detach();
-            var expectedTokens = new string[] {"#Word"};
+            var expectedTokens = new string[] {"#Word", "#RCurl"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)

@@ -30,7 +30,6 @@ namespace Cucumber
 
             if (ruleType == RuleType.Alternation && _node.SubNodes.Count == 1)
             {
-                _node.ParentNode.SubNodes.Remove(_node);
                 foreach (var subNode in _node.SubNodes.Single().SubNodes)
                 {
                     AddToParent(subNode, _node.ParentNode);
