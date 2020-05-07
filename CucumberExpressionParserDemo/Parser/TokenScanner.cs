@@ -28,6 +28,7 @@ namespace Cucumber
                 }
 
                 var type = GetTokenType(c, treatNextAsText);
+                treatNextAsText = false;
                 if (type != tokenType)
                 {
                     if (tokenType != TokenType.None)
