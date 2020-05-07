@@ -21,8 +21,8 @@ namespace Cucumber
 
         private static readonly Dictionary<TokenType, string> ExpectedTokenTypeDisplayTexts = new Dictionary<TokenType, string>
         {
-            { TokenType.LCurl, "}" },
-            { TokenType.RCurl, "{" },
+            { TokenType.LCurl, "{" },
+            { TokenType.RCurl, "}" },
             { TokenType.LParen, "(" },
             { TokenType.RParen, ")" },
             { TokenType.Slash, "/" },
@@ -33,8 +33,13 @@ namespace Cucumber
             if (receivedToken == null) throw new ArgumentNullException(nameof(receivedToken));
             if (expectedTokenTypes == null) throw new ArgumentNullException(nameof(expectedTokenTypes));
 
-            return $"expected: {string.Join(", ", expectedTokenTypes.Select(GetTokenTypeDisplayText))}, got '{receivedToken.Text}'" 
+            return $"expected: {GetTokenList(expectedTokenTypes)}, got '{receivedToken.Text}'" 
                    + GetPositionText(receivedToken);
+        }
+
+        internal static string GetTokenList(string[] expectedTokenTypes)
+        {
+            return string.Join(", ", expectedTokenTypes.Select(GetTokenTypeDisplayText));
         }
 
         private static string GetTokenTypeDisplayText(string tokenTypeName)

@@ -17,7 +17,7 @@ namespace Cucumber
         {
             if (expectedTokenTypes == null) throw new ArgumentNullException(nameof(expectedTokenTypes));
 
-            return $"unexpected end of file, expected: {string.Join(", ", expectedTokenTypes)}";
+            return $"unexpected end of file, expected: {UnexpectedTokenException.GetTokenList(expectedTokenTypes)}";
         }
     }
 }
