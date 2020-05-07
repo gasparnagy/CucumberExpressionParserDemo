@@ -12,17 +12,27 @@ namespace Cucumber
         public UnexpectedTokenException(Token receivedToken, string[] expectedTokenTypes, string stateComment)
             : base(GetMessage(receivedToken, expectedTokenTypes))
         {
-            ReceivedToken = receivedToken ?? throw new ArgumentNullException("receivedToken");
-            ExpectedTokenTypes = expectedTokenTypes ?? throw new ArgumentNullException("expectedTokenTypes");
+            ReceivedToken = receivedToken ?? throw new ArgumentNullException(nameof(receivedToken));
+            ExpectedTokenTypes = expectedTokenTypes ?? throw new ArgumentNullException(nameof(expectedTokenTypes));
             StateComment = stateComment;
         }
 
         private static string GetMessage(Token receivedToken, string[] expectedTokenTypes)
         {
-            if (receivedToken == null) throw new ArgumentNullException("receivedToken");
-            if (expectedTokenTypes == null) throw new ArgumentNullException("expectedTokenTypes");
+            if (receivedToken == null) throw new ArgumentNullException(nameof(receivedToken));
+            if (expectedTokenTypes == null) throw new ArgumentNullException(nameof(expectedTokenTypes));
 
-            return $"expected: {string.Join(", ", expectedTokenTypes)}, got '{receivedToken.Text}'";
+            return $"expected: {string.Join(", ", expectedTokenTypes)}, got '{receivedToken.Text}'" 
+                   + GetPositionText(receivedToken);
+        }
+
+        private static string GetPositionText(Token token)
+        {
+            return
+                Environment.NewLine +
+                token.SourceLine +
+                Environment.NewLine +
+                new string(' ', token.StartPosition) + "^";
         }
     }
 }

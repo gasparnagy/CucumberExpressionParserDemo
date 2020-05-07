@@ -17,10 +17,13 @@ namespace Cucumber
         {
             var tokenType = TokenType.None;
             var tokenText = new StringBuilder(expressionString.Length);
+            int startPosition = 0;
 
+            int position = -1;
             bool treatNextAsText = false;
             foreach (var c in expressionString)
             {
+                position++;
                 if (!treatNextAsText && c == '\\')
                 {
                     treatNextAsText = true;
@@ -32,16 +35,17 @@ namespace Cucumber
                 if (type != tokenType)
                 {
                     if (tokenType != TokenType.None)
-                        yield return new Token(tokenType, tokenText.ToString());
+                        yield return new Token(tokenType, tokenText.ToString(), expressionString, startPosition);
                     tokenType = type;
                     tokenText.Clear();
+                    startPosition = position;
                 }
 
                 tokenText.Append(c);
             }
             if (tokenType != TokenType.None)
-                yield return new Token(tokenType, tokenText.ToString());
-            yield return new Token(TokenType.EOF, string.Empty);
+                yield return new Token(tokenType, tokenText.ToString(), expressionString, startPosition);
+            yield return new Token(TokenType.EOF, string.Empty, expressionString, expressionString.Length);
         }
 
         private TokenType GetTokenType(in char c, in bool treatAsText)

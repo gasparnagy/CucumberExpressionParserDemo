@@ -9,13 +9,13 @@ namespace Cucumber
         public UnexpectedEOFException(Token receivedToken, string[] expectedTokenTypes, string stateComment)
             : base(GetMessage(expectedTokenTypes))
         {
-            ExpectedTokenTypes = expectedTokenTypes ?? throw new ArgumentNullException("expectedTokenTypes");
+            ExpectedTokenTypes = expectedTokenTypes ?? throw new ArgumentNullException(nameof(expectedTokenTypes));
             StateComment = stateComment;
         }
 
         private static string GetMessage(string[] expectedTokenTypes)
         {
-            if (expectedTokenTypes == null) throw new ArgumentNullException("expectedTokenTypes");
+            if (expectedTokenTypes == null) throw new ArgumentNullException(nameof(expectedTokenTypes));
 
             return $"unexpected end of file, expected: {string.Join(", ", expectedTokenTypes)}";
         }
