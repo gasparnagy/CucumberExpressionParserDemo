@@ -21,11 +21,14 @@ namespace Cucumber
 
         private static readonly Dictionary<TokenType, string> ExpectedTokenTypeDisplayTexts = new Dictionary<TokenType, string>
         {
-            { TokenType.LCurl, "{" },
-            { TokenType.RCurl, "}" },
-            { TokenType.LParen, "(" },
-            { TokenType.RParen, ")" },
-            { TokenType.Slash, "/" },
+            { TokenType.LCurl, "'{'" },
+            { TokenType.RCurl, "'}'" },
+            { TokenType.LParen, "'('" },
+            { TokenType.RParen, "')'" },
+            { TokenType.Slash, "'/'" },
+            { TokenType.Separator, "<word separator>" },
+            { TokenType.Word, "<word>" },
+            { TokenType.EOF, "<end>" },
         };
 
         private static string GetMessage(Token receivedToken, string[] expectedTokenTypes)
@@ -45,10 +48,10 @@ namespace Cucumber
         private static string GetTokenTypeDisplayText(string tokenTypeName)
         {
             var tokenType = Enum.Parse<TokenType>(tokenTypeName.TrimStart('#'));
-            return ExpectedTokenTypeDisplayTexts.TryGetValue(tokenType, out var text) ? $"'{text}'" : tokenTypeName;
+            return ExpectedTokenTypeDisplayTexts.TryGetValue(tokenType, out var text) ? text : tokenTypeName;
         }
 
-        private static string GetPositionText(Token token)
+        internal static string GetPositionText(Token token)
         {
             return
                 Environment.NewLine +

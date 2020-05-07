@@ -7,17 +7,18 @@ namespace Cucumber
         public string StateComment { get; private set; }
         public string[] ExpectedTokenTypes { get; private set; }
         public UnexpectedEOFException(Token receivedToken, string[] expectedTokenTypes, string stateComment)
-            : base(GetMessage(expectedTokenTypes))
+            : base(GetMessage(receivedToken, expectedTokenTypes))
         {
             ExpectedTokenTypes = expectedTokenTypes ?? throw new ArgumentNullException(nameof(expectedTokenTypes));
             StateComment = stateComment;
         }
 
-        private static string GetMessage(string[] expectedTokenTypes)
+        private static string GetMessage(Token receivedToken, string[] expectedTokenTypes)
         {
             if (expectedTokenTypes == null) throw new ArgumentNullException(nameof(expectedTokenTypes));
 
-            return $"unexpected end of file, expected: {UnexpectedTokenException.GetTokenList(expectedTokenTypes)}";
+            return $"unexpected end of expression, expected: {UnexpectedTokenException.GetTokenList(expectedTokenTypes)}" +
+                UnexpectedTokenException.GetPositionText(receivedToken);
         }
     }
 }
