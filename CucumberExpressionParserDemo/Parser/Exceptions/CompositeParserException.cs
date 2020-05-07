@@ -18,7 +18,7 @@ namespace Cucumber
         {
             if (errors == null) throw new ArgumentNullException(nameof(errors));
 
-            return "Parser errors:" + Environment.NewLine + string.Join(Environment.NewLine, errors.Select(e => e.Message));
+            return string.Join(Environment.NewLine, errors.Select(e => e.Message));
         }
     }
 }

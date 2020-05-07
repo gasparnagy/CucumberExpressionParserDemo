@@ -5,6 +5,7 @@
 	TargetNamespace -> Cucumber.Ast
 	TargetClassName -> CucumberExpression
 	SimpleTokenMatcher -> true
+	MaxCollectedError -> 1
 ]
 
 

@@ -16,11 +16,6 @@ namespace CucumberExpressionParserDemo
                 var expression = parser.Parse(new TokenScanner(expressionString));
                 Console.WriteLine(expression);
             }
-            catch (CompositeParserException ex)
-            {
-                Console.WriteLine("ERROR:");
-                Console.WriteLine(ex.Errors.First().Message);
-            }
             catch (ParserException ex)
             {
                 Console.WriteLine("ERROR:");

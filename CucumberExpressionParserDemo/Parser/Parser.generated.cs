@@ -100,7 +100,7 @@ namespace Cucumber
         private void AddError(ParserContext context, ParserException error)
         {
             context.Errors.Add(error);
-            if (context.Errors.Count > 10)
+            if (context.Errors.Count >= 1)
                 throw new CompositeParserException(context.Errors.ToArray());
         }
 
