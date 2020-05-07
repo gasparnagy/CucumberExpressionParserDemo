@@ -1,0 +1,14 @@
+﻿[
+	Tokens -> #Word,#Separator,#Slash,#LParen,#RParen,#LCurl,#RCurl
+	ClassName -> CucumberExpressionsParser
+	Namespace -> Cucumber
+	TargetNamespace -> Cucumber.Ast
+	TargetClassName -> CucumberExpression
+]
+
+
+CucumberExpression! := (WordLike | Optional | Parameter | #Separator)*
+WordLike := (#Word | Alternation)
+Alternation! [#Word->#Slash]:= #Word (#Slash #Word)+
+Optional! := #LParen (#Word | #Separator)+ #RParen
+Parameter! := #LCurl #Word #RCurl
