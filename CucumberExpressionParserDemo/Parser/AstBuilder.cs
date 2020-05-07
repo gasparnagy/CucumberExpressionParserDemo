@@ -5,7 +5,6 @@ namespace Cucumber
 {
     public class AstBuilder : IAstBuilder
     {
-        private CucumberExpressionAstNode _rootNode;
         private CucumberExpressionAstNode _node;
 
         private static readonly TokenType[] PreservedTokenTypes = {TokenType.Word, TokenType.Separator};
@@ -18,33 +17,32 @@ namespace Cucumber
 
         public void StartRule(RuleType ruleType)
         {
-            if (ruleType == RuleType.Text && _node?.SubNodes.LastOrDefault()?.RuleType == RuleType.Text)
-            {
-                _node = _node.SubNodes.Last();
-                return;
-            }
-
-            CucumberExpressionAstNode newNode = new CucumberExpressionAstNode(ruleType, _node);
-            if (_rootNode == null)
-            {
-                _rootNode = newNode;
-            }
-            else
-            {
-                _node.SubNodes.Add(newNode);
-            }
-
-            _node = newNode;
+            _node = new CucumberExpressionAstNode(ruleType, _node);
         }
 
         public void EndRule(RuleType ruleType)
         {
+            if (ruleType == RuleType.CucumberExpression)
+                return; // keep last node in _node
+
+            AddToParent(_node, _node.ParentNode);
             _node = _node.ParentNode;
+        }
+
+        private void AddToParent(CucumberExpressionAstNode node, CucumberExpressionAstNode parentNode)
+        {
+            if (node.RuleType == RuleType.Text && parentNode.SubNodes.LastOrDefault()?.RuleType == RuleType.Text)
+            {
+                parentNode.SubNodes.Last().Tokens.AddRange(node.Tokens);
+                return;
+            }
+
+            parentNode.SubNodes.Add(node);
         }
 
         public CucumberExpression GetResult()
         {
-            return new CucumberExpression(_rootNode);
+            return new CucumberExpression(_node);
         }
     }
 }
