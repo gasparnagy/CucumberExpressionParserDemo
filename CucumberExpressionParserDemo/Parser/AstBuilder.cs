@@ -17,6 +17,9 @@ namespace Cucumber
 
         public void StartRule(RuleType ruleType)
         {
+            if (ruleType == RuleType.Separator)
+                ruleType = RuleType.Text;
+
             _node = new CucumberExpressionAstNode(ruleType, _node);
         }
 
@@ -25,7 +28,19 @@ namespace Cucumber
             if (ruleType == RuleType.CucumberExpression)
                 return; // keep last node in _node
 
-            AddToParent(_node, _node.ParentNode);
+            if (ruleType == RuleType.Alternation && _node.SubNodes.Count == 1)
+            {
+                _node.ParentNode.SubNodes.Remove(_node);
+                foreach (var subNode in _node.SubNodes.Single().SubNodes)
+                {
+                    AddToParent(subNode, _node.ParentNode);
+                }
+            }
+            else
+            {
+                AddToParent(_node, _node.ParentNode);
+            }
+
             _node = _node.ParentNode;
         }
 

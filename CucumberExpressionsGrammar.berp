@@ -8,9 +8,10 @@
 ]
 
 
-CucumberExpression! := (Text | Optional | Parameter | Alternation)*
-Text! := (#Word | #Separator)
-Alternation! [#Word->#Slash]:= Alternate (#Slash Alternate)+
-Alternate! := #Word
+CucumberExpression! := (Separator | Parameter | Alternation)*
+Separator! := #Separator
+Alternation! := Alternate (#Slash Alternate)*
+Alternate! [->#Word]:= (Optional | Text)+
+Text! := #Word
 Optional! := #LParen (#Word | #Separator)+ #RParen
 Parameter! := #LCurl #Word #RCurl
