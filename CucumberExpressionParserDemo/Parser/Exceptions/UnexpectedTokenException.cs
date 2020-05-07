@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cucumber
 {
@@ -17,13 +19,28 @@ namespace Cucumber
             StateComment = stateComment;
         }
 
+        private static readonly Dictionary<TokenType, string> ExpectedTokenTypeDisplayTexts = new Dictionary<TokenType, string>
+        {
+            { TokenType.LCurl, "}" },
+            { TokenType.RCurl, "{" },
+            { TokenType.LParen, "(" },
+            { TokenType.RParen, ")" },
+            { TokenType.Slash, "/" },
+        };
+
         private static string GetMessage(Token receivedToken, string[] expectedTokenTypes)
         {
             if (receivedToken == null) throw new ArgumentNullException(nameof(receivedToken));
             if (expectedTokenTypes == null) throw new ArgumentNullException(nameof(expectedTokenTypes));
 
-            return $"expected: {string.Join(", ", expectedTokenTypes)}, got '{receivedToken.Text}'" 
+            return $"expected: {string.Join(", ", expectedTokenTypes.Select(GetTokenTypeDisplayText))}, got '{receivedToken.Text}'" 
                    + GetPositionText(receivedToken);
+        }
+
+        private static string GetTokenTypeDisplayText(string tokenTypeName)
+        {
+            var tokenType = Enum.Parse<TokenType>(tokenTypeName.TrimStart('#'));
+            return ExpectedTokenTypeDisplayTexts.TryGetValue(tokenType, out var text) ? $"'{text}'" : tokenTypeName;
         }
 
         private static string GetPositionText(Token token)
