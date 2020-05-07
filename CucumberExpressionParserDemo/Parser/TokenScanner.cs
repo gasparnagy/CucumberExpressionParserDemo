@@ -76,7 +76,6 @@ namespace Cucumber
         {
             if (!_scanner.MoveNext())
                 return null;
-            Console.WriteLine(_scanner.Current);
             return _scanner.Current;
         }
     }
