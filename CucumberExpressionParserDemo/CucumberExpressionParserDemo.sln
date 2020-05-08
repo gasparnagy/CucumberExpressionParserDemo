@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{04380E1F-E285-4EC8-93E7-D47C64E8E142}"
 	ProjectSection(SolutionItems) = preProject
 		..\CucumberExpressionsGrammar.berp = ..\CucumberExpressionsGrammar.berp
+		..\generate-parser.cmd = ..\generate-parser.cmd
 	EndProjectSection
 EndProject
 Global
