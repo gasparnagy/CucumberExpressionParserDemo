@@ -48,8 +48,20 @@ namespace Cucumber
     }
 
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class CucumberExpressionsParser
+    public partial class CucumberExpressionsParser<T>
     {
+        private readonly IAstBuilder<T> astBuilder;
+
+        public CucumberExpressionsParser()
+            : this(new AstBuilder<T>())
+        {
+        }
+
+        public CucumberExpressionsParser(IAstBuilder<T> astBuilder)
+        {
+            this.astBuilder = astBuilder;
+        }
+
         public bool StopAtFirstError { get; set;}
 
         [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -57,23 +69,23 @@ namespace Cucumber
         {
             public ITokenScanner TokenScanner { get; set; }
             public ITokenMatcher TokenMatcher { get; set; }
-            public IAstBuilder Builder { get; set; }
             public Queue<Token> TokenQueue { get; set; }
             public List<ParserException> Errors { get; set; }
         }
 
-        public Cucumber.Ast.CucumberExpression Parse(ITokenScanner tokenScanner)
+        public T Parse(ITokenScanner tokenScanner)
         {
-            return Parse(tokenScanner, new TokenMatcher(), new AstBuilder());
+            return Parse(tokenScanner, new TokenMatcher());
         }
 
-        public Cucumber.Ast.CucumberExpression Parse(ITokenScanner tokenScanner, ITokenMatcher tokenMatcher, IAstBuilder astBuilder)
+        public T Parse(ITokenScanner tokenScanner, ITokenMatcher tokenMatcher)
         {
+            tokenMatcher.Reset();
+            astBuilder.Reset();
             var context = new ParserContext
             {
                 TokenScanner = tokenScanner,
                 TokenMatcher = tokenMatcher,
-                Builder = astBuilder,
                 TokenQueue = new Queue<Token>(),
                 Errors = new List<ParserException>()
             };
@@ -134,22 +146,22 @@ namespace Cucumber
 
         void Build(ParserContext context, Token token)
         {
-            HandleAstError(context, () => context.Builder.Build(token));
+            HandleAstError(context, () => this.astBuilder.Build(token));
         }
 
         void StartRule(ParserContext context, RuleType ruleType)
         {
-            HandleAstError(context, () => context.Builder.StartRule(ruleType));
+            HandleAstError(context, () => this.astBuilder.StartRule(ruleType));
         }
 
         void EndRule(ParserContext context, RuleType ruleType)
         {
-            HandleAstError(context, () => context.Builder.EndRule(ruleType));
+            HandleAstError(context, () => this.astBuilder.EndRule(ruleType));
         }
 
-        Cucumber.Ast.CucumberExpression GetResult(ParserContext context)
+        T GetResult(ParserContext context)
         {
-            return context.Builder.GetResult();
+            return this.astBuilder.GetResult();
         }
 
         Token ReadToken(ParserContext context)
@@ -1058,12 +1070,13 @@ namespace Cucumber
         
     }
 
-    public partial interface IAstBuilder 
+    public partial interface IAstBuilder<T> 
     {
         void Build(Token token);
         void StartRule(RuleType ruleType);
         void EndRule(RuleType ruleType);
-        Cucumber.Ast.CucumberExpression GetResult();
+        T GetResult();
+        void Reset();
     }
 
     public partial interface ITokenScanner 
@@ -1082,11 +1095,13 @@ namespace Cucumber
         bool Match_LCurl(Token token);
         bool Match_RCurl(Token token);
         bool Match_Other(Token token);
+        void Reset();
     }
 
 
     public partial class SimpleTokenMatcher : ITokenMatcher
     {
+        public virtual void Reset() { }
 
         public virtual bool Match_EOF(Token token) => token.TokenType == TokenType.EOF;
         public virtual bool Match_Word(Token token) => token.TokenType == TokenType.Word;

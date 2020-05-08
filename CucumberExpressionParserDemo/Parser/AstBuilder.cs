@@ -3,7 +3,7 @@ using Cucumber.Ast;
 
 namespace Cucumber
 {
-    public class AstBuilder : IAstBuilder
+    public class AstBuilder<T> : IAstBuilder<T>
     {
         private CucumberExpressionAstNode _node;
 
@@ -54,9 +54,14 @@ namespace Cucumber
             parentNode.SubNodes.Add(node);
         }
 
-        public CucumberExpression GetResult()
+        public T GetResult()
         {
-            return new CucumberExpression(_node);
+            var expression = new CucumberExpression(_node);
+            return (T)(object)expression;
+        }
+
+        public void Reset()
+        {
         }
     }
 }

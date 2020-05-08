@@ -1,17 +1,10 @@
 ﻿namespace Cucumber.Ast
 {
-    public class CucumberExpression
+    public class CucumberExpression : CucumberExpressionAstNode
     {
-        public CucumberExpression(CucumberExpressionAstNode node)
+        public CucumberExpression(CucumberExpressionAstNode node): base(RuleType.CucumberExpression, null)
         {
-            Node = node;
-        }
-
-        public CucumberExpressionAstNode Node { get; }
-
-        public override string ToString()
-        {
-            return Node?.ToString();
+            SubNodes.AddRange(node.SubNodes);
         }
     }
 }
