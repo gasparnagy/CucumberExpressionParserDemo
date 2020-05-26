@@ -13,7 +13,7 @@ Separator! := #Separator
 // the one-branch alternations are flattened out in the AST builder
 Alternation! := Alternate (#Slash Alternate)*
 // to allow parameters inside alternatetion and checking it as an error in a later stage, the 'Alternate' rule has to be extended with '| Parameter'
-Alternate! [->#Word]:= (Optional | Text)+
+Alternate! [->]:= (Optional | Text)+
 Text! := #Word
 Optional! := #LParen (#Word | #Separator)+ #RParen
 Parameter! := #LCurl #Word? #RCurl

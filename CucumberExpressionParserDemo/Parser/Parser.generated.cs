@@ -41,7 +41,7 @@ namespace Cucumber
         CucumberExpression, // CucumberExpression! := (Separator | Parameter | Alternation)*
         Separator, // Separator! := #Separator
         Alternation, // Alternation! := Alternate (#Slash Alternate)*
-        Alternate, // Alternate! [-&gt;#Word] := (Optional | Text)+
+        Alternate, // Alternate! [-&gt;#EOF|#Word|#Separator|#Slash|#LParen|#RParen|#LCurl|#RCurl|#Other] := (Optional | Text)+
         Text, // Text! := #Word
         Optional, // Optional! := #LParen (#Word | #Separator)+ #RParen
         Parameter, // Parameter! := #LCurl #Word? #RCurl
@@ -1055,7 +1055,15 @@ namespace Cucumber
                 queue.Enqueue(token);
 
                 if (false
+                    || Match_EOF(context, token)
                     || Match_Word(context, token)
+                    || Match_Separator(context, token)
+                    || Match_Slash(context, token)
+                    || Match_LParen(context, token)
+                    || Match_RParen(context, token)
+                    || Match_LCurl(context, token)
+                    || Match_RCurl(context, token)
+                    || Match_Other(context, token)
                 )
                 {
                     match = true;
